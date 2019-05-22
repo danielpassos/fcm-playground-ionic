@@ -1,5 +1,10 @@
 import { Component, Injectable } from '@angular/core';
 import { Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
+import { ConfigurationService } from '@aerogear/core';
+import { PushRegistration } from '@aerogear/push';
+
+declare var require: any;
+const config = require('./mobile-services.json');
 
 export interface Message {
   date: Date;
@@ -35,9 +40,22 @@ export class HomePage {
       this.messages.push({
           date: new Date(),
           type: 'registration',
-          message: 'Device registered'
+          message: 'Device registered on Firebase'
         });
-      console.log('Device registered', registration);
+      console.log('Device registered on Firebase', registration);
+
+      new PushRegistration(new ConfigurationService(config))
+      .register(registration.registrationId, 'Passos', ['ionic', 'playground'])
+      .then(() => {
+        this.messages.push({
+          date: new Date(),
+          type: 'registration',
+          message: 'Device registered on UnifiedPush Server'
+        });
+        console.log('Device registered on UnifiedPush Server');
+      }).catch(err => {
+        console.error('Error on device registration', err);
+      });
     });
 
     pushObject
@@ -46,7 +64,7 @@ export class HomePage {
       this.messages.push({
         date: new Date(),
         type: 'notification',
-        message: notification.title
+        message: notification.message
       });
       console.log('Received a notification', notification);
     });

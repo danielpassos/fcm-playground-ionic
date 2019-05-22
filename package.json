@@ -14,6 +14,8 @@
   },
   "private": true,
   "dependencies": {
+    "@aerogear/cordova-plugin-aerogear-push": "^2.4.0",
+    "@aerogear/push": "^2.4.0",
     "@angular/common": "^7.2.2",
     "@angular/core": "^7.2.2",
     "@angular/forms": "^7.2.2",
@@ -81,7 +83,8 @@
       "phonegap-plugin-push": {
         "ANDROID_SUPPORT_V13_VERSION": "27.+",
         "FCM_VERSION": "11.6.2"
-      }
+      },
+      "cordova-plugin-aerogear-push": {}
     },
     "platforms": [
       "android"
