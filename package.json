@@ -1,5 +1,6 @@
 {
-  "name": "fcm-playground",
+  "name": "fcm-ionic",
+  "displayName": "FCM (Ionic)",
   "version": "0.0.1",
   "author": "Daniel Passos",
   "homepage": "http://daniel.passos.me/",
