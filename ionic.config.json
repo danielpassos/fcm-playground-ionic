@@ -1,5 +1,7 @@
 {
   "name": "FCM Playground",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
