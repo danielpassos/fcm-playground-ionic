@@ -21,6 +21,7 @@ export interface Message {
 export class HomePage {
 
   messages = [] as Message[];
+  registered = false;
 
   constructor(private push: Push) {
     const options: PushOptions = {
@@ -34,28 +35,17 @@ export class HomePage {
 
     const pushObject: PushObject = this.push.init(options);
 
-    pushObject
-    .on('registration')
-    .subscribe((registration: any) => {
+    new PushRegistration(new ConfigurationService(config))
+    .register('Passos', ['ionic', 'playground'])
+    .then(() => {
       this.messages.push({
-          date: new Date(),
-          type: 'registration',
-          message: 'Device registered on Firebase'
-        });
-      console.log('Device registered on Firebase', registration);
-
-      new PushRegistration(new ConfigurationService(config))
-      .register(registration.registrationId, 'Passos', ['ionic', 'playground'])
-      .then(() => {
-        this.messages.push({
-          date: new Date(),
-          type: 'registration',
-          message: 'Device registered on UnifiedPush Server'
-        });
-        console.log('Device registered on UnifiedPush Server');
-      }).catch(err => {
-        console.error('Error on device registration', err);
+        date: new Date(),
+        type: 'registration',
+        message: 'Device registered on UnifiedPush Server'
       });
+      console.log('Device registered on UnifiedPush Server');
+    }).catch(err => {
+      console.error('Error on device registration', err);
     });
 
     pushObject
@@ -69,16 +59,9 @@ export class HomePage {
       console.log('Received a notification', notification);
     });
 
-    pushObject
-    .on('error')
-    .subscribe(error => {
-      this.messages.push({
-        date: new Date(),
-        type: 'error',
-        message: 'Error with Push plugin'
-      });
-      console.error('Error with Push plugin', error);
-    });
+  }
+
+  private register() {
 
   }
 
