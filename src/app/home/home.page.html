@@ -7,6 +7,16 @@
 </ion-header>
 
 <ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" color="success" [disabled]="registered" (click)="register()">Register</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button expand="full" color="danger" [disabled]="!registered" (click)="unregister()">Unregister</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
   <ion-card *ngFor="let message of messages">
     <ion-card-header>{{message.date | date: 'yyyy-MM-dd H:mm'}} - {{message.type}}</ion-card-header>
     <ion-card-content>

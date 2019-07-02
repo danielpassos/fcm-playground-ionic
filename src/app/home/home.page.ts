@@ -24,17 +24,9 @@ export class HomePage {
   registered = false;
 
   constructor(private push: Push) {
-    const options: PushOptions = {
-      android: {},
-      ios: {
-        alert: 'true',
-        badge: true,
-        sound: 'false'
-      }
-    };
+  }
 
-    const pushObject: PushObject = this.push.init(options);
-
+  register() {
     new PushRegistration(new ConfigurationService(config))
     .register('Passos', ['ionic', 'playground'])
     .then(() => {
@@ -43,26 +35,51 @@ export class HomePage {
         type: 'registration',
         message: 'Device registered on UnifiedPush Server'
       });
+      this.registered = true;
       console.log('Device registered on UnifiedPush Server');
+
+      const options: PushOptions = {
+        android: {},
+        ios: {
+          alert: 'true',
+          badge: true,
+          sound: 'false'
+        }
+      };
+
+      const pushObject: PushObject = this.push.init(options);
+
+      pushObject
+      .on('notification')
+      .subscribe((notification: any) => {
+        this.messages.push({
+          date: new Date(),
+          type: 'notification',
+          message: notification.message
+        });
+        console.log('Received a notification', notification);
+      });
     }).catch(err => {
+      this.registered = false;
       console.error('Error on device registration', err);
     });
-
-    pushObject
-    .on('notification')
-    .subscribe((notification: any) => {
-      this.messages.push({
-        date: new Date(),
-        type: 'notification',
-        message: notification.message
-      });
-      console.log('Received a notification', notification);
-    });
-
   }
 
-  private register() {
-
+  unregister() {
+    new PushRegistration(new ConfigurationService(config))
+    .unregister()
+    .then(() => {
+      this.messages.push({
+        date: new Date(),
+        type: 'registration',
+        message: 'Device unregistered on UnifiedPush Server'
+      });
+      this.registered = false;
+      console.log('Device unregistered on UnifiedPush Server');
+    }).catch(err => {
+      this.registered = true;
+      console.error('Error on device registration', err);
+    });
   }
 
 }
