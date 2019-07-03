@@ -28,7 +28,7 @@ export class HomePage {
 
   register() {
     new PushRegistration(new ConfigurationService(config))
-    .register('Passos', ['ionic', 'playground'])
+    .register({alias: 'Passos', categories: ['ionic', 'cordova']})
     .then(() => {
       this.messages.push({
         date: new Date(),
